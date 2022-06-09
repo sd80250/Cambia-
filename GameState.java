@@ -4,12 +4,13 @@ class GameState {
 	private Card topDiscardCard;
 	private Player cambiaCaller;
 	private Player currentPlayer;
+
 	public boolean isCambiaCalled() {
 		return currentPlayer != null;
 	}
+
 	public Player whoCalledCambia() {
-		if isCambiaCalled() return currentPlayer;
-		return null;
+		return currentPlayer;
 	}
 	public void main() {
 		List<Card> deck1 = new ArrayList<>();
@@ -21,4 +22,8 @@ class GameState {
 		}
 		Deck deck = new Deck(deck1);
 	}
+	private void callCambia();
+	private void drawFromDeck();
+	private void drawFromDiscard();
+	public void turn();
 }
