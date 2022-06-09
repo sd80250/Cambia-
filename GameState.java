@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 class GameState {
 	private Deck[] playerHands;
 	private Deck drawPile;
@@ -16,13 +15,15 @@ class GameState {
 	}
 	public static void main(String[] args) {
 		List<Card> deck1 = new ArrayList<>();
-		for (int i = 0; i < 52; i+=4) {
+		for (int i = 4; i < 56; i+=4) {
 			deck1.add(new Card(i/4, 0));
 			deck1.add(new Card(i/4, 1));
 			deck1.add(new Card(i/4, 2));
 			deck1.add(new Card(i/4, 3));
 		}
+		Collections.shuffle(deck1);
 		Deck deck = new Deck(deck1);
+		System.out.println(deck);
 	}
 
 	// terminal methods
