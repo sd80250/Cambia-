@@ -1,3 +1,5 @@
+import java.util.List;
+import java.util.ArrayList;
 class GameState {
 	private Deck[] playerHands;
 	private Deck drawPile;
@@ -22,8 +24,8 @@ class GameState {
 		}
 		Deck deck = new Deck(deck1);
 	}
-	private void callCambia();
-	private void drawFromDeck();
-	private void drawFromDiscard();
-	public void turn();
+	private void callCambia() {}
+	private void drawFromDeck() {}
+	private void drawFromDiscard() {}
+	public void turn() {}
 }
