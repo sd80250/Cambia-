@@ -14,7 +14,7 @@ class GameState {
 	public Player whoCalledCambia() {
 		return currentPlayer;
 	}
-	public void main() {
+	public void main(String[] args) {
 		List<Card> deck1 = new ArrayList<>();
 		for (int i = 0; i < 52; i+=4) {
 			deck1.add(new Card(i/4, 0));
