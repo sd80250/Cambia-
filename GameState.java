@@ -17,10 +17,10 @@ class GameState {
 	public void main() {
 		List<Card> deck1 = new ArrayList<>();
 		for (int i = 0; i < 52; i+=4) {
-			deck1.add(new Card(i, 0));
-			deck1.add(new Card(i, 1));
-			deck1.add(new Card(i, 2));
-			deck1.add(new Card(i, 3));
+			deck1.add(new Card(i/4, 0));
+			deck1.add(new Card(i/4, 1));
+			deck1.add(new Card(i/4, 2));
+			deck1.add(new Card(i/4, 3));
 		}
 		Deck deck = new Deck(deck1);
 	}
