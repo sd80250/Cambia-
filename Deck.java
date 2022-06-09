@@ -1,9 +1,9 @@
 import java.util.List;
 
 class Deck {
-	private List<Card> deck;
-	public Deck(List<Card> deck) {
-		this.deck = deck;
+	private List<Card> cardList;
+	public Deck(List<Card> cardList) {
+		this.cardList = cardList;
 	}
 }
 

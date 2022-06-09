@@ -10,10 +10,9 @@ class GameState {
 	}
 
 	public Player whoCalledCambia() {
-		if isCambiaCalled() return currentPlayer;
-		return null;
+		return currentPlayer;
 	}
-	
+
 	private void callCambia();
 	private void drawFromDeck();
 	private void drawFromDiscard();
