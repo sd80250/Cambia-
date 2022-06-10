@@ -12,6 +12,12 @@ class Deck {
 		}
 		return text;
 	}
+	public Card getCard(int index) {
+		return cardList.get(index);
+	}
+	public void remove(int index) {
+		cardList.remove(index);
+	}
 }
 
 class Card {
