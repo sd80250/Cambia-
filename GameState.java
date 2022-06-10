@@ -35,6 +35,13 @@ class GameState {
 			}
 			players[i] = new Player(playerdeck);
 		}
+
+		//show bottom 2 cards
+		for (Player player : players) {
+			System.out.println(player.getName());
+			System.out.println(player.getPlayerHand().getCardList().get(2));
+			System.out.println(player.getPlayerHand().getCardList().get(3));
+		}
 	}
 
 	public boolean isCambiaCalled() {
