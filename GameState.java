@@ -36,6 +36,7 @@ class GameState {
 			List<Card> playerdeck = new ArrayList<>();
 			for (int j = 0; j < 4; j++) {
 				playerdeck.add(drawPile.getCard(0));
+				System.out.println(drawPile.getCard(0));
 				drawPile.remove(0);
 			}
 			players[i] = new Player(playerdeck);
@@ -114,12 +115,13 @@ class GameState {
 			useAbility();
 
 			topDiscardCard = card;
-			
+			endTurn();
 			return;
 		}
 		if (s.equals("No") || s.equals("no")) {
 			chooseToReplace(card);
 			System.out.println(currentPlayer.getPlayerHand());
+			endTurn();
 			return;
 		}
 		else {
@@ -132,6 +134,7 @@ class GameState {
 	}
 	private void drawFromDiscard() {
 		chooseToReplace(topDiscardCard);
+		endTurn();
 	}
 	private void chooseToReplace(Card card) {
 		Scanner scanner = new Scanner(System.in);
@@ -141,7 +144,7 @@ class GameState {
 			System.out.println(index + ") " + card1);
 			index++;
 		}
-		int discardNumber = scanner.nextInt();
+		int discardNumber = scanner.nextInt() - 1;
 		currentPlayer.replaceCard(discardNumber, card);
 		System.out.println(currentPlayer.getPlayerHand());
 	}

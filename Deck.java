@@ -83,13 +83,17 @@ class Card {
 		}
 
 		if (suite == Card.CLUBS) {
-			displaySuite = "♣";
+			//displaySuite = "♣";
+			displaySuite = "clubs";
 		} else if (suite == Card.DIAMONDS) {
-			displaySuite = "♢";
+			//displaySuite = "♢";
+			displaySuite = "diamonds";
 		} else if (suite == Card.HEARTS) {
-			displaySuite = "♡";
+			//displaySuite = "♡";
+			displaySuite = "hearts";
 		} else if (suite == Card.SPADES) {
-			displaySuite = "♠";
+			//displaySuite = "♠";
+			displaySuite = "spades";
 		} else {
 			displaySuite = "ERROR";
 		}
