@@ -1,11 +1,14 @@
 import java.util.*;
 import java.util.Map.Entry;
+import java.io.PrintWriter;
 class GameState {
 	private Player[] players;
 	private Deck drawPile;
 	private Card topDiscardCard;
 	private Player cambiaCaller;
 	private Player currentPlayer;
+
+	private PrintWriter pw = new PrintWriter(System.out, true);
 
 	public void createGame() {
 		//make a deck of cards
@@ -16,12 +19,14 @@ class GameState {
 			deck1.add(new Card(i/4, 2));
 			deck1.add(new Card(i/4, 3));
 		}
+		deck1.add(new Card(0, Card.RED));
+		deck1.add(new Card(0, Card.BLACK));
 		Collections.shuffle(deck1);
 		drawPile = new Deck(deck1);
 
 		//create players
 		Scanner scan = new Scanner(System.in);
-		System.out.println("Enter number of players");
+		pw.println("Enter number of players");
 		int a = scan.nextInt();
 		if (a < 1 || a > 13) {
 			throw new IllegalArgumentException("f");
@@ -38,14 +43,18 @@ class GameState {
 
 		//show bottom 2 cards
 		for (Player player : players) {
-			System.out.println(player.getName());
-			System.out.println(player.getPlayerHand().getCardList().get(2));
-			System.out.println(player.getPlayerHand().getCardList().get(3));
+			pw.println(player.getName());
+			pw.println(player.getPlayerHand().getCardList().get(2));
+			pw.println(player.getPlayerHand().getCardList().get(3));
 		}
+
+		currentPlayer = players[new Random().nextInt(players.length)]; // get a random player to start
+
+		turn();
 	}
 
 	public boolean isCambiaCalled() {
-		return currentPlayer != null;
+		return cambiaCaller != null;
 	}
 
 	public Player whoCalledCambia() {
@@ -56,11 +65,11 @@ class GameState {
 	// terminal methods
 	private void decideOnMove(boolean isCambiaCalled) {
 		Scanner turnScanner = new Scanner(System.in);
-		System.out.print("What is your next move? K: Draw from deck. D: Draw from discard pile. ");
+		pw.print("What is your next move? K: Draw from deck. D: Draw from discard pile. ");
 		if (isCambiaCalled) {
-			System.out.println();
+			pw.println();
 		} else { // if Cambia isn't called, then add this as an option
-			System.out.println("C: Call Cambia.");
+			pw.println("C: Call Cambia.");
 		}
 
 		String nextMoveInput = turnScanner.nextLine();
@@ -78,7 +87,7 @@ class GameState {
 				drawFromDiscard();
 				break;
 			default:
-				System.out.print("That is not a valid option. ");
+				pw.print("That is not a valid option. ");
 				decideOnMove(isCambiaCalled); // recursive	
 		}
 	}
@@ -88,8 +97,9 @@ class GameState {
 
 	// game state methods
 	private void callCambia() {
-		System.out.println(currentPlayer.getName() + " has called Cambia.");
+		pw.println(currentPlayer.getName() + " has called Cambia.");
 		cambiaCaller = currentPlayer;
+		endTurn();
 	}
 
 	private void drawFromDeck() {
@@ -112,6 +122,7 @@ class GameState {
 		else {
 			throw new IllegalArgumentException("just answer yes or no");
 		}
+	}
 
 	private void useAbility() {
 
@@ -131,17 +142,22 @@ class GameState {
 		currentPlayer.replaceCard(discardNumber, card);
 	}
 	// end of turn methods
-	private void endTurn() {
+	private void endTurn() { // go to the next player
+		for (int i = 0; i < players.length; i++) {
+			if (players[i].equals(currentPlayer)) {
+				currentPlayer = players[(i+1)%players.length];
+				break;
+			}
+		}
 
+		turn();
 	}
 
 	// end of game methods
-	private void declareWinner() { // TODO: test
+	private void declareWinner() {
 		int minPlayerScore = Integer.MAX_VALUE;
 		Player winner = null;
 		Map<Player, Integer> results = new HashMap();
-
-
 
 		// get score from each player
 		for (Player player : players) {
@@ -163,12 +179,12 @@ class GameState {
 
 		// display hand, winner, and ranking by score
 		for (Player player : players) {
-			System.out.println(player);
+			pw.println(player);
 		}
-		System.out.println(winner.getName() + " is the winner with a score of " + minPlayerScore + ".");
-		System.out.println("Here are the results:");
+		pw.println(winner.getName() + " is the winner with a score of " + minPlayerScore + ".");
+		pw.println("Here are the results:");
 		for (Entry e : resultsList) {
-			System.out.println(((Player) e.getKey()).getName() + "-" + e.getValue());
+			pw.println(((Player) e.getKey()).getName() + "-" + e.getValue());
 		}
 	}
 
@@ -177,12 +193,13 @@ class GameState {
 	}
 
 	public void turn() { // TODO: test
-		System.out.println("Draw Pile Size:" + drawPile.size());
-		for (Player player : players) {
-			System.out.println(player.getName() + ":" + 
-							   player.getPlayerHand().size());
-		}
 		// print the state of the game
+		pw.println("Draw Pile Size: " + drawPile.size());
+		pw.println("Discard Pile Top Card: " + topDiscardCard);
+		for (Player player : players) {
+			pw.println(player.getName() + ": " + player.getPlayerHand().size());
+		}
+		pw.println("It's " + currentPlayer.getName() + "'s turn.");
 
 		if (isCambiaCalled()) { 
 			if (whoCalledCambia().equals(currentPlayer)) {

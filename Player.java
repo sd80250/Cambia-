@@ -10,7 +10,7 @@ class Player {
 		name = scan.next();
 	}
 	public String toString() {
-		return "deck" + playerDeck.toString() + "name " + name;
+		return "deck: " + playerDeck.toString() + "  name: " + name;
 	}
 	public String getName() {
 		return name;
