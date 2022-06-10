@@ -42,6 +42,8 @@ class GameState {
 			System.out.println(player.getPlayerHand().getCardList().get(2));
 			System.out.println(player.getPlayerHand().getCardList().get(3));
 		}
+
+		declareWinner(); //testing purposes
 	}
 
 	public boolean isCambiaCalled() {
@@ -105,6 +107,10 @@ class GameState {
 		int minPlayerScore = Integer.MAX_VALUE;
 		Player winner = null;
 		Map<Player, Integer> results = new HashMap();
+
+
+
+		// get score from each player
 		for (Player player : players) {
 			Deck playerHand = player.getPlayerHand();
 			int playerScore = 0;
@@ -117,8 +123,15 @@ class GameState {
 			}
 			results.put(player, playerScore);
 		}
+
+		// sort players by score
 		List<Entry<Player, Integer>> resultsList = new ArrayList<>(results.entrySet());
 		resultsList.sort(Entry.comparingByValue());
+
+		// display hand, winner, and ranking by score
+		for (Player player : players) {
+			System.out.println(player);
+		}
 		System.out.println(winner.getName() + " is the winner with a score of " + minPlayerScore + ".");
 		System.out.println("Here are the results:");
 		for (Entry e : resultsList) {

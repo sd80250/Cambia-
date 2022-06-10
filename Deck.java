@@ -63,29 +63,29 @@ class Card {
 				return "BLACK JOKER";
 			}
 		} else if (number == 1) {
-			displayNumber == "A";
+			displayNumber = "A";
 		} else if (number >= 2 && number <= 10) {
-			displayNumber == Integer.toString(number);
+			displayNumber = Integer.toString(number);
 		} else if (number == 11) {
-			displayNumber == "J";
+			displayNumber = "J";
 		} else if (number == 12) {
-			displayNumber == "Q";
+			displayNumber = "Q";
 		} else if (number == 13) {
-			displayNumber == "K";
+			displayNumber = "K";
 		} else {
-			displayNumber == "ERROR";
+			displayNumber = "ERROR";
 		}
 
 		if (suite == Card.CLUBS) {
-			displaySuite == "♣";
+			displaySuite = "♣";
 		} else if (suite == Card.DIAMONDS) {
-			displaySuite == "♦";
+			displaySuite = "♢";
 		} else if (suite == Card.HEARTS) {
-			displaySuite == "♥";
+			displaySuite = "♡";
 		} else if (suite == Card.SPADES) {
-			displaySuite == "♠";
+			displaySuite = "♠";
 		} else {
-			displaySuite == "ERROR";
+			displaySuite = "ERROR";
 		}
 
 		return displayNumber + displaySuite;
