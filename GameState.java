@@ -93,11 +93,44 @@ class GameState {
 	private void callCambia() {
 
 	}
-	private void drawFromDeck() {}
-	private void drawFromDiscard() {
-		
+	private void drawFromDeck() {
+		Card card = drawPile.getCard(0);
+		System.out.println(card);
+		drawPile.remove(0);
+		System.out.println("Discard?");
+		Scanner scanner = new Scanner(System.in);
+		String s = scanner.nextLine();
+		System.out.println("Yes/No");
+		if (s.equals("Yes") || s.equals("yes")) {
+			useAbility();
+			topDiscardCard = card;
+			return;
+		}
+		if (s.equals("No") || s.equals("no")) {
+			chooseToReplace(card);
+			return;
+		}
+		else {
+			throw new IllegalArgumentException("just answer yes or no");
+		}
 	}
+	private void useAbility() {
 
+	}
+	private void drawFromDiscard() {
+		chooseToReplace(topDiscardCard);
+	}
+	private void chooseToReplace(Card card) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("which card do you want to replace?");
+		int index = 1;
+		for (Card card1 : currentPlayer.getPlayerHand().getCardList()) {
+			System.out.println(index + ") " + card1);
+			index++;
+		}
+		int discardNumber = scanner.nextInt();
+		currentPlayer.replaceCard(discardNumber, card);
+	}
 	// end of turn methods
 	private void endTurn() {
 

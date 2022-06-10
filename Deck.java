@@ -21,6 +21,9 @@ class Deck {
 	public Card getCard(int index) {
 		return cardList.get(index);
 	}
+	public void replaceCard(int index, Card card) {
+		cardList.set(index, card);
+	}
 	public void remove(int index) {
 		cardList.remove(index);
 	}
