@@ -108,15 +108,18 @@ class GameState {
 		drawPile.remove(0);
 		System.out.println("Discard?");
 		Scanner scanner = new Scanner(System.in);
-		String s = scanner.nextLine();
 		System.out.println("Yes/No");
+				String s = scanner.nextLine();
 		if (s.equals("Yes") || s.equals("yes")) {
 			useAbility();
+
 			topDiscardCard = card;
+			
 			return;
 		}
 		if (s.equals("No") || s.equals("no")) {
 			chooseToReplace(card);
+			System.out.println(currentPlayer.getPlayerHand());
 			return;
 		}
 		else {
@@ -140,6 +143,7 @@ class GameState {
 		}
 		int discardNumber = scanner.nextInt();
 		currentPlayer.replaceCard(discardNumber, card);
+		System.out.println(currentPlayer.getPlayerHand());
 	}
 	// end of turn methods
 	private void endTurn() { // go to the next player
@@ -193,11 +197,11 @@ class GameState {
 	}
 
 	public void turn() { // TODO: test
-		// print the state of the game
+		// print the state of the gameS
 		pw.println("Draw Pile Size: " + drawPile.size());
 		pw.println("Discard Pile Top Card: " + topDiscardCard);
 		for (Player player : players) {
-			pw.println(player.getName() + ": " + player.getPlayerHand().size());
+			pw.println(player.getName() + ": " + player.getPlayerHand().size() + "cards");
 		}
 		pw.println("It's " + currentPlayer.getName() + "'s turn.");
 
