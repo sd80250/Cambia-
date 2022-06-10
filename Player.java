@@ -12,4 +12,10 @@ class Player {
 	public String toString() {
 		return "deck" + playerDeck.toString() + "name" + name;
 	}
+	public String getName() {
+		return name;
+	}
+	public Deck getPlayerHand() {
+		return playerDeck;
+	}
 }

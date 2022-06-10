@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Map.Entry;
 class GameState {
 	private Player[] players;
 	private Deck drawPile;
@@ -46,37 +47,91 @@ class GameState {
 	
 
 	// terminal methods
-	private int decideOnMove() {}
-	private final int CALL_CAMBIA = 0;
-	private final int DRAW_FROM_DECK = 1;
-	private final int DRAW_FROM_DISCARD = 2;
+	private void decideOnMove(boolean isCambiaCalled) {
+		Scanner turnScanner = new Scanner(System.in);
+		System.out.print("What is your next move? K: Draw from deck. D: Draw from discard pile. ");
+		if (isCambiaCalled) {
+			System.out.println();
+		} else { // if Cambia isn't called, then add this as an option
+			System.out.println("C: Call Cambia.");
+		}
+
+		String nextMoveInput = turnScanner.nextLine();
+
+		switch (nextMoveInput) {
+			case CALL_CAMBIA:
+				if (!isCambiaCalled) {
+					callCambia();
+					break;
+				} // if Cambia is already called, then the program should go to the default case.
+			case DRAW_FROM_DECK:
+				drawFromDeck();
+				break;
+			case DRAW_FROM_DISCARD:
+				drawFromDiscard();
+				break;
+			default:
+				System.out.print("That is not a valid option. ");
+				decideOnMove(isCambiaCalled); // recursive	
+		}
+	}
+	private final String CALL_CAMBIA = "C";
+	private final String DRAW_FROM_DECK = "K";
+	private final String DRAW_FROM_DISCARD = "D";
 
 	// game state methods
-	private void callCambia() {}
+	private void callCambia() {
+
+	}
 	private void drawFromDeck() {}
 	private void drawFromDiscard() {}
 
-	// end of game methods
-	private void countScore() {}
-	private void declareWinner() {}
-	private void endGame() {}
+	// end of turn methods
+	private void endTurn() {
 
-	public void turn() {
-		if (isCambiaCalled()) {
-			if (cambiaCaller.equals(currentPlayer)) {
-				countScore();
+	}
+
+	// end of game methods
+	private void declareWinner() { // TODO: test
+		int minPlayerScore = Integer.MAX_VALUE;
+		Player winner = null;
+		Map<Player, Integer> results = new HashMap();
+		for (Player player : players) {
+			Deck playerHand = player.getPlayerHand(); // TODO: update to the actual name
+			int playerScore = 0;
+			for (Card card : playerHand.getCardList()) {
+				playerScore += card.getValue();
+			}
+			if (playerScore < minPlayerScore) {
+				minPlayerScore = playerScore;
+				winner = player;
+			}
+			results.put(player, playerScore);
+		}
+		List<Entry<Player, Integer>> resultsList = new ArrayList<>(results.entrySet());
+		resultsList.sort(Entry.comparingByValue());
+		System.out.println(winner.getName() + " is the winner with a score of " + minPlayerScore + "."); // TODO: update to match actual name
+		System.out.println("Here are the results:");
+		for (Entry e : resultsList) {
+			System.out.println(((Player) e.getKey()).getName() + "-" + e.getValue());
+		}
+	}
+
+	private void endGame() {
+		System.out.println("Would you like to play another round?");
+		// continues onto next round
+	}
+
+	public void turn() { // TODO: test
+		if (isCambiaCalled()) { 
+			if (whoCalledCambia().equals(currentPlayer)) {
 				declareWinner();
 				endGame();
 			} else {
-				switch (decideOnMove()) {
-				case CALL_CAMBIA:
-					callCambia();
-				case DRAW_FROM_DECK:
-					drawFromDeck();
-				case DRAW_FROM_DISCARD:
-					drawFromDiscard();
-				}
+				decideOnMove(true);
 			}
+		} else {
+			decideOnMove(false);
 		}
 	}
 }
