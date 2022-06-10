@@ -42,6 +42,8 @@ class GameState {
 			System.out.println(player.getPlayerHand().getCardList().get(2));
 			System.out.println(player.getPlayerHand().getCardList().get(3));
 		}
+
+		//turn
 	}
 
 	public boolean isCambiaCalled() {
@@ -130,6 +132,12 @@ class GameState {
 	}
 
 	public void turn() { // TODO: test
+
+		System.out.println("Draw Pile Size:" + drawPile.size());
+		for (Player player : players) {
+			System.out.println(player.getName() + ":" + 
+							   player.getPlayerHand().size());
+		}
 		if (isCambiaCalled()) { 
 			if (whoCalledCambia().equals(currentPlayer)) {
 				declareWinner();

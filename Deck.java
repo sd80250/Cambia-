@@ -8,6 +8,9 @@ class Deck {
 	public List<Card> getCardList() {
 		return cardList;
 	}
+	public int size() {
+		return cardList.size();
+	}
 	public String toString() {
 		String text = "";
 		for (int i = 0; i < cardList.size(); i++) {
