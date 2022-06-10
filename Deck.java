@@ -30,8 +30,8 @@ class Card {
 	private int number;
 	private int suite; // 0 is diamond; 1 is club; 2 is heart; 3 is spades
 
-	public static final int DIAMONDS = 0;
-	public static final int CLUBS = 1;
+	public static final int CLUBS = 0;
+	public static final int DIAMONDS = 1;
 	public static final int HEARTS = 2;
 	public static final int SPADES = 3;
 
@@ -56,7 +56,46 @@ class Card {
 	}
 
 	public String toString() {
-		return Integer.toString(number) + "," + Integer.toString(suite);
+		String displayNumber;
+		String displaySuite;
+
+		if (number == 0) {
+			if (suite == Card.RED) {
+				return "RED JOKER";
+			} else {
+				return "BLACK JOKER";
+			}
+		} else if (number == 1) {
+			displayNumber = "A";
+		} else if (number >= 2 && number <= 10) {
+			displayNumber = Integer.toString(number);
+		} else if (number == 11) {
+			displayNumber = "J";
+		} else if (number == 12) {
+			displayNumber = "Q";
+		} else if (number == 13) {
+			displayNumber = "K";
+		} else {
+			displayNumber = "ERROR";
+		}
+
+		if (suite == Card.CLUBS) {
+			displaySuite = "♣";
+		} else if (suite == Card.DIAMONDS) {
+			displaySuite = "♢";
+		} else if (suite == Card.HEARTS) {
+			displaySuite = "♡";
+		} else if (suite == Card.SPADES) {
+			displaySuite = "♠";
+		} else {
+			displaySuite = "ERROR";
+		}
+
+		return displayNumber + displaySuite;
 	}
 
 }
+
+
+
+

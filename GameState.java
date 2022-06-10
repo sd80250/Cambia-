@@ -43,7 +43,8 @@ class GameState {
 			System.out.println(player.getPlayerHand().getCardList().get(3));
 		}
 
-		//turn
+
+		declareWinner(); //testing purposes
 	}
 
 	public boolean isCambiaCalled() {
@@ -93,7 +94,9 @@ class GameState {
 
 	}
 	private void drawFromDeck() {}
-	private void drawFromDiscard() {}
+	private void drawFromDiscard() {
+		
+	}
 
 	// end of turn methods
 	private void endTurn() {
@@ -105,8 +108,12 @@ class GameState {
 		int minPlayerScore = Integer.MAX_VALUE;
 		Player winner = null;
 		Map<Player, Integer> results = new HashMap();
+
+
+
+		// get score from each player
 		for (Player player : players) {
-			Deck playerHand = player.getPlayerHand(); // TODO: update to the actual name
+			Deck playerHand = player.getPlayerHand();
 			int playerScore = 0;
 			for (Card card : playerHand.getCardList()) {
 				playerScore += card.getValue();
@@ -117,9 +124,16 @@ class GameState {
 			}
 			results.put(player, playerScore);
 		}
+
+		// sort players by score
 		List<Entry<Player, Integer>> resultsList = new ArrayList<>(results.entrySet());
 		resultsList.sort(Entry.comparingByValue());
-		System.out.println(winner.getName() + " is the winner with a score of " + minPlayerScore + "."); // TODO: update to match actual name
+
+		// display hand, winner, and ranking by score
+		for (Player player : players) {
+			System.out.println(player);
+		}
+		System.out.println(winner.getName() + " is the winner with a score of " + minPlayerScore + ".");
 		System.out.println("Here are the results:");
 		for (Entry e : resultsList) {
 			System.out.println(((Player) e.getKey()).getName() + "-" + e.getValue());
@@ -132,12 +146,13 @@ class GameState {
 	}
 
 	public void turn() { // TODO: test
-
 		System.out.println("Draw Pile Size:" + drawPile.size());
 		for (Player player : players) {
 			System.out.println(player.getName() + ":" + 
 							   player.getPlayerHand().size());
 		}
+		// print the state of the game
+
 		if (isCambiaCalled()) { 
 			if (whoCalledCambia().equals(currentPlayer)) {
 				declareWinner();
