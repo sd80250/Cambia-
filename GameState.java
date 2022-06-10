@@ -42,9 +42,6 @@ class GameState {
 			System.out.println(player.getPlayerHand().getCardList().get(2));
 			System.out.println(player.getPlayerHand().getCardList().get(3));
 		}
-
-
-		declareWinner(); //testing purposes
 	}
 
 	public boolean isCambiaCalled() {
@@ -91,11 +88,16 @@ class GameState {
 
 	// game state methods
 	private void callCambia() {
+		System.out.println(currentPlayer.getName() + " has called Cambia.");
+		cambiaCaller = currentPlayer;
+	}
+
+	private void drawFromDeck() {
 
 	}
-	private void drawFromDeck() {}
+
 	private void drawFromDiscard() {
-		
+		topDiscardCard = chooseCardToReplace(topDiscardCard);
 	}
 
 	// end of turn methods
@@ -141,8 +143,7 @@ class GameState {
 	}
 
 	private void endGame() {
-		System.out.println("Would you like to play another round?");
-		// continues onto next round
+		
 	}
 
 	public void turn() { // TODO: test
