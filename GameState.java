@@ -133,6 +133,11 @@ class GameState {
 
 	}
 	private void drawFromDiscard() {
+		if (topDiscardCard == null) {
+			System.out.println("you can't do that");
+			turn();
+			return;
+		}
 		chooseToReplace(topDiscardCard);
 		endTurn();
 	}
