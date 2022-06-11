@@ -6,14 +6,25 @@ public class Server {
 	private DataInputStream in = null;
 
 	public void start(int port) {
+		GameState gameState = new GameState();
+		gameState.createGame();
+
 		try {
 			serverSocket = new ServerSocket(port);
-			while (true) {
-				new EchoClientHandler(serverSocket.accept()).start();
+			int numClients = 0;
+			Player[] players = new Player[gameState.getNumPlayers()];
+			while (numClients < gameState.getNumPlayers()) {
+				new ClientHandler(serverSocket.accept()).start();
+				players[numClients].setPlayersID(numClients);
+
+				numClients++;
 			}
+			System.out.println("No more players can enter");
+			System.out.println("Game starting...");
 		} catch (IOException i) {
 			System.out.println(i);
 		}
+
 	}
 
 	public void stop() {
@@ -24,12 +35,12 @@ public class Server {
 		}
 	}
 
-	private static class EchoClientHandler extends Thread {
+	private static class ClientHandler extends Thread {
 		private Socket clientSocket;
 		private PrintWriter out;
 		private BufferedReader in;
 
-		public EchoClientHandler(Socket socket) {
+		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
 		}
 
@@ -39,6 +50,8 @@ public class Server {
 				out = new PrintWriter(clientSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+				out.println("ask What is your name?");
+				String name = in.readLine();
 				String inputLine;
 				while ((inputLine = in.readLine())!= null) {
 					if ("Over".equals(inputLine)) {

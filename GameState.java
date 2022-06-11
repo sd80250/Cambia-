@@ -7,11 +7,13 @@ class GameState {
 	private Card topDiscardCard;
 	private Player cambiaCaller;
 	private Player currentPlayer;
+	private int numPlayers;
 
 	private PrintWriter pw = new PrintWriter(System.out, true);
-	public int numPlayers() {
-		return players.length;
+	public int getNumPlayers() {
+		return numPlayers;
 	}
+	
 	public void createGame() {
 		//make a deck of cards
 		List<Card> deck1 = new ArrayList<>();
@@ -29,15 +31,15 @@ class GameState {
 		//create players
 		Scanner scan = new Scanner(System.in);
 		pw.println("Enter number of players");
-		
+		numPlayers = scan.nextInt();
+		if (numPlayers < 1 || numPlayers > 13) {
+			throw new IllegalArgumentException("f");
+		}
 	}
 
 	public void createPlayers() {
-		int a = scan.nextInt();
-		if (a < 1 || a > 13) {
-			throw new IllegalArgumentException("f");
-		}
-		players = new Player[];
+		
+		players = new Player[numPlayers];
 		for (int i = 0; i < players.length; i++) {
 			List<Card> playerdeck = new ArrayList<>();
 			for (int j = 0; j < 4; j++) {
