@@ -9,6 +9,9 @@ class Player {
 	public String toString() {
 		return "deck: " + playerDeck.toString() + "  name: " + name;
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getName() {
 		return name;
 	}
@@ -23,5 +26,9 @@ class Player {
 	}*/
 	public void setPlayersID(int id) {
 		this.id = id;
+	}
+
+	public int getPlayerID() {
+		return id;
 	}
 }
