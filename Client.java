@@ -1,46 +1,64 @@
 import java.net.*;
 import java.io.*;
+import java.util.Scanner;
+
 
 public class Client {
 	private Socket socket = null;
 	private PrintWriter out;
 	private BufferedReader in;
+	private Scanner sc;
 
-	public Client(String address, int port) {
-		
+	public void start(String address, int port) {
 		try {
 			socket = new Socket(address, port);
-			
-
-			in = new BufferedReader(new InputStreamReader(System.in));
+			sc = new Scanner(System.in);
 			out = new PrintWriter(socket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (UnknownHostException u) {
 			System.out.println(u);
 		} catch (IOException i) {
 			System.out.println(i);
 		}
 
+		Thread receiver = new Thread(new Runnable() {
+			String command;
+
+			public void run() {
+				try {
+					while ((command = in.readLine())!=null) {
+						System.out.println("Server: " + command);
+					}
+					System.out.println("Server closed.");
+					out.close();
+					socket.close();
+				} catch (IOException e) {
+					System.out.println(e);
+				}
+			}
+		});
+
+		receiver.start();
+
 		String line = "";
 
 		while (!line.equals("Over")) {
-			try {
-				line = in.readLine();
-				out.println(line);
-			} catch (IOException i) {
-				System.out.println(i);
-			}
+			line = sc.nextLine();
+			out.println(line);
 		}
 
 		try {
 			in.close();
 			out.close();
 			socket.close();
+			sc.close();
 		} catch (IOException i) {
 			System.out.println(i);
 		}
 	}
 
 	public static void main(String[] args) {
-		Client client = new Client("127.0.0.1",5000);
+		Client client = new Client();
+		client.start("127.0.0.1",5000);
 	}
 }

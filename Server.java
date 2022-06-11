@@ -2,19 +2,14 @@ import java.net.*;
 import java.io.*;
 
 public class Server {
-	private Socket socket = null;
 	private ServerSocket serverSocket = null;
 	private DataInputStream in = null;
 
 	public void start(int port) {
-		GameState game = new GameState();
-		game.createGame();
 		try {
 			serverSocket = new ServerSocket(port);
-			int numberOfPlayers = 0;
-			while (numberOfPlayers < game.numPlayers()) {
+			while (true) {
 				new EchoClientHandler(serverSocket.accept()).start();
-				numberOfPlayers++;
 			}
 		} catch (IOException i) {
 			System.out.println(i);
@@ -40,18 +35,23 @@ public class Server {
 
 		public void run() {
 			try {
-				System.out.println("running");
-				out = new PrintWriter(System.out, true);
+				System.out.println("Client connected.");
+				out = new PrintWriter(clientSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 				String inputLine;
 				while ((inputLine = in.readLine())!= null) {
-					if (".".equals(inputLine)) {
+					if ("Over".equals(inputLine)) {
 						out.println("bye");
 						break;
 					}
-					out.println(inputLine);
+					if ("hi".equals(inputLine)) {
+						out.println("shut up");
+					}
+					System.out.println(inputLine);
 				}
+
+				System.out.println("Client disconnected.");
 
 				in.close();
 				out.close();
