@@ -3,42 +3,64 @@ import java.io.*;
 
 public class Server {
 	private Socket socket = null;
-	private ServerSocket server = null;
+	private ServerSocket serverSocket = null;
 	private DataInputStream in = null;
 
-	public Server(int port) {
+	public void start(int port) {
 		try {
-			server = new ServerSocket(port);
-			System.out.println("Server started");
-
-			System.out.println("Waiting for a client...");
-
-			socket = server.accept();
-			System.out.println("Client accepted");
-
-			// takes input from client socket
-			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-			String line = "";
-
-			while (!line.equals("Over")) {
-				try {
-					line = in.readUTF();
-					System.out.println(line);
-				} catch (IOException i) {
-					System.out.println(i);
-				}
+			serverSocket = new ServerSocket(port);
+			while (true) {
+				new EchoClientHandler(serverSocket.accept()).start();
 			}
-			System.out.println("Closing connection");
-
-			socket.close();
-			in.close();
 		} catch (IOException i) {
 			System.out.println(i);
 		}
 	}
 
+	public void stop() {
+		try {
+			serverSocket.close();
+		} catch (IOException i) {
+			System.out.println(i);
+		}
+	}
+
+	private static class EchoClientHandler extends Thread {
+		private Socket clientSocket;
+		private PrintWriter out;
+		private BufferedReader in;
+
+		public EchoClientHandler(Socket socket) {
+			this.clientSocket = socket;
+		}
+
+		public void run() {
+			try {
+				System.out.println("running");
+				out = new PrintWriter(System.out, true);
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+				String inputLine;
+				while ((inputLine = in.readLine())!= null) {
+					if (".".equals(inputLine)) {
+						out.println("bye");
+						break;
+					}
+					out.println(inputLine);
+				}
+
+				in.close();
+				out.close();
+				clientSocket.close();
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		}
+	}
+
+
 	public static void main(String[] args) {
-		Server server = new Server(5000);
+		Server server = new Server();
+		server.start(5000);
 	}
 }

@@ -3,16 +3,16 @@ import java.io.*;
 
 public class Client {
 	private Socket socket = null;
-	private DataInputStream input = null;
-	private DataOutputStream out = null;
+	private PrintWriter out;
+	private BufferedReader in;
 
 	public Client(String address, int port) {
 		try {
 			socket = new Socket(address, port);
 			System.out.println("Connected");
 
-			input = new DataInputStream(System.in);
-			out = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(System.in));
+			out = new PrintWriter(socket.getOutputStream(), true);
 		} catch (UnknownHostException u) {
 			System.out.println(u);
 		} catch (IOException i) {
@@ -23,15 +23,15 @@ public class Client {
 
 		while (!line.equals("Over")) {
 			try {
-				line = input.readLine();
-				out.writeUTF(line);
+				line = in.readLine();
+				out.println(line);
 			} catch (IOException i) {
 				System.out.println(i);
 			}
 		}
 
 		try {
-			input.close();
+			in.close();
 			out.close();
 			socket.close();
 		} catch (IOException i) {
