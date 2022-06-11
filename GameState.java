@@ -9,7 +9,9 @@ class GameState {
 	private Player currentPlayer;
 
 	private PrintWriter pw = new PrintWriter(System.out, true);
-
+	public int numPlayers() {
+		return players.length;
+	}
 	public void createGame() {
 		//make a deck of cards
 		List<Card> deck1 = new ArrayList<>();
@@ -27,16 +29,19 @@ class GameState {
 		//create players
 		Scanner scan = new Scanner(System.in);
 		pw.println("Enter number of players");
+		
+	}
+
+	public void createPlayers() {
 		int a = scan.nextInt();
 		if (a < 1 || a > 13) {
 			throw new IllegalArgumentException("f");
 		}
-		players = new Player[a];
+		players = new Player[];
 		for (int i = 0; i < players.length; i++) {
 			List<Card> playerdeck = new ArrayList<>();
 			for (int j = 0; j < 4; j++) {
 				playerdeck.add(drawPile.getCard(0));
-				System.out.println(drawPile.getCard(0));
 				drawPile.remove(0);
 			}
 			players[i] = new Player(playerdeck);
@@ -50,9 +55,8 @@ class GameState {
 		}
 
 		currentPlayer = players[new Random().nextInt(players.length)]; // get a random player to start
-
-		turn();
 	}
+		
 
 	public boolean isCambiaCalled() {
 		return cambiaCaller != null;

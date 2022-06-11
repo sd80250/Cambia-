@@ -7,9 +7,10 @@ public class Client {
 	private BufferedReader in;
 
 	public Client(String address, int port) {
+		
 		try {
 			socket = new Socket(address, port);
-			System.out.println("Connected");
+			
 
 			in = new BufferedReader(new InputStreamReader(System.in));
 			out = new PrintWriter(socket.getOutputStream(), true);

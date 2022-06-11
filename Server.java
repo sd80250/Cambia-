@@ -7,10 +7,14 @@ public class Server {
 	private DataInputStream in = null;
 
 	public void start(int port) {
+		GameState game = new GameState();
+		game.createGame();
 		try {
 			serverSocket = new ServerSocket(port);
-			while (true) {
+			int numberOfPlayers = 0;
+			while (numberOfPlayers < game.numPlayers()) {
 				new EchoClientHandler(serverSocket.accept()).start();
+				numberOfPlayers++;
 			}
 		} catch (IOException i) {
 			System.out.println(i);
