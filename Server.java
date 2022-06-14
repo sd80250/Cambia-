@@ -1,13 +1,16 @@
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 public class Server {
 	private ServerSocket serverSocket = null;
 	private DataInputStream in = null;
 	private boolean[] playersStatus;
+	private Player player;
+	private GameState gameState;
 
 	public void start(int port) {
-		GameState gameState = new GameState();
+		gameState = new GameState();
 		gameState.createGame();
 		playersStatus = new boolean[gameState.getNumPlayers()];
 
@@ -15,7 +18,7 @@ public class Server {
 			serverSocket = new ServerSocket(port);
 			int numClients = 0;
 			while (numClients < gameState.getNumPlayers()) {
-				new ClientHandler(serverSocket.accept(), gameState.getPlayer(numClients), playersStatus).start();
+				new ClientHandler(serverSocket.accept(), gameState.getPlayer(numClients), playersStatus, gameState).start();
 				numClients++;
 			}
 			System.out.println("No more players can enter");
@@ -40,11 +43,15 @@ public class Server {
 		private BufferedReader in;
 		private Player player;
 		private boolean[] playersStatus;
+		private GameState gameState;
+		private int id;
 
-		public ClientHandler(Socket socket, Player player, boolean[] playersStatus) {
+		public ClientHandler(Socket socket, Player player, boolean[] playersStatus, GameState gameState) {
 			this.clientSocket = socket;
 			this.player = player;
 			this.playersStatus = playersStatus;
+			this.gameState = gameState;
+			id =  player.getPlayerID();
 		}
 
 		public void run() {
@@ -55,9 +62,9 @@ public class Server {
 
 				askForName();
 
-				while (notEveryoneIsReady()) {
+				/*while (notEveryoneIsReady()) {
 
-				}
+				}*/
 
 
 				String inputLine;
@@ -68,6 +75,39 @@ public class Server {
 					}
 					if ("hi".equals(inputLine)) {
 						out.println("shut up");
+					}
+					if ("flipMyCard".equals(inputLine)) {
+						out.println("Ask which card do you want to flip");
+						int cardFlipped = Integer.parseInt(in.readLine());
+						out.println(id);
+						try {
+							gameState.flipMyCard(id, cardFlipped);
+						} catch (NullPointerException i){
+							out.println("lol retart");
+							out.println("guys this dude tried to flip on a null card");
+							out.println(id);
+							//player.drawCard(gameState.getDrawPileTopCard());
+							gameState.punishDraw(id);
+						}
+					}
+					if ("flipOtherCard".equals(inputLine)) {
+						out.println("Ask which player's card do you want to flip");
+						int otherDude = Integer.parseInt(in.readLine());
+						out.println("Ask which card do you want to flip");
+						int cardFlipped = Integer.parseInt(in.readLine());
+
+						try {
+							gameState.flipOtherCard(player.getPlayerID(), otherDude, cardFlipped);
+						} catch (NullPointerException i){
+							out.println("Sorry can't grab null cards");
+							gameState.punishDraw(id);
+						} catch (ArrayIndexOutOfBoundsException i) {
+							out.println("u stupid");
+							gameState.punishDraw(id);
+						}
+					}
+					if ("displayMyDeck".equals(inputLine)) {
+						out.println(player);
 					}
 					System.out.println(inputLine);
 				}
@@ -87,6 +127,7 @@ public class Server {
 				out.println("ask What is your name?");
 				player.setName(in.readLine()); // sets the name for player
 				System.out.println("Name for player " + player.getPlayerID() + " is " + player.getName());
+				playersStatus[player.getPlayerID()]=true;
 			} catch (IOException e) {
 				System.out.println(e);
 			}

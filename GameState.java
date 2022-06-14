@@ -8,9 +8,14 @@ class GameState {
 	private Player cambiaCaller;
 	private Player currentPlayer;
 	private int numPlayers;
+	private int clientID;
+	private Map<Integer, Player> idPlayerMap;
 
 	public int getNumPlayers() {
 		return numPlayers;
+	}
+	public Card getDrawPileTopCard() {
+		return drawPile.getCard(0);
 	}
 
 	public Player getPlayer(int playerID) {
@@ -49,9 +54,10 @@ class GameState {
 		}
 	}
 
-	private void createPlayers() {
+	public void createPlayers() {
 		// create players
 		players = new Player[numPlayers];
+		idPlayerMap = new HashMap();
 		for (int i = 0; i < players.length; i++) {
 			List<Card> playerdeck = new ArrayList<>();
 			for (int j = 0; j < 4; j++) {
@@ -59,6 +65,7 @@ class GameState {
 				drawPile.remove(0);
 			}
 			players[i] = new Player(playerdeck);
+			idPlayerMap.put(i, players[i]);
 		}
 	}
 
@@ -66,8 +73,29 @@ class GameState {
 		// set a random current player
 		currentPlayer = players[new Random().nextInt(players.length)];
 	}
-		
 
+	public void flipMyCard(int id, int cardFlipped) {
+		if (players[id].getPlayerHand().getCard(cardFlipped).getNumber()==topDiscardCard.getNumber()) {
+			players[id].replaceCard(cardFlipped, null);
+		} else {
+			punishDraw(id);
+		}
+	}
+
+	public void flipOtherCard(int id, int otherId, int cardFlipped) {
+		if (players[otherId].getPlayerHand().getCard(cardFlipped).getNumber()==topDiscardCard.getNumber()) {
+			players[otherId].replaceCard(cardFlipped, null);
+		} else {
+			punishDraw(id);
+		}
+	}
+
+	public void punishDraw(int id) {
+		System.out.println("GameState.punishDraw:");
+		System.out.println(players[id]);
+		players[id].drawCard(drawPile.getCard(0));
+		drawPile.remove(0);
+	}
 	public boolean isCambiaCalled() {
 		return cambiaCaller != null;
 	}
@@ -126,9 +154,10 @@ class GameState {
 		System.out.println("Yes/No");
 				String s = scanner.nextLine();
 		if (s.equals("Yes") || s.equals("yes")) {
+			topDiscardCard = card;
 			useAbility();
 
-			topDiscardCard = card;
+			
 			endTurn();
 			return;
 		}
@@ -144,7 +173,19 @@ class GameState {
 	}
 
 	private void useAbility() {
-
+		switch(topDiscardCard.getNumber()) {
+		case 7:
+		case 8:
+			break;
+		case 9:
+		case 10:
+			break;
+		case 11:
+		case 12:
+			break;
+		case 13:
+			break;
+		}
 	}
 	private void drawFromDiscard() {
 		if (topDiscardCard == null) {
@@ -203,7 +244,7 @@ class GameState {
 		List<Entry<Player, Integer>> resultsList = new ArrayList<>(results.entrySet());
 		resultsList.sort(Entry.comparingByValue());
 
-		// display hand, winner, and ranking by score
+		//  hand, winner, and ranking by score
 		for (Player player : players) {
 			System.out.println(player);
 		}

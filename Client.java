@@ -27,7 +27,7 @@ public class Client {
 			public void run() {
 				try {
 					while ((command = in.readLine())!=null) {
-						if (command.substring(4).equals("ask ")) {
+						if (command.length() >= 4 && command.substring(4).equals("ask ")) {
 							System.out.println(command.substring(4, command.length()));
 							sc = new Scanner(System.in);
 							out.println(sc);

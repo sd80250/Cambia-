@@ -4,6 +4,5 @@ class Main {
 		Server server = new Server();
 		server.start(5000);
 		
-		
 	}
 }

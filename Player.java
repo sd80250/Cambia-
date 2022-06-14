@@ -31,4 +31,10 @@ class Player {
 	public int getPlayerID() {
 		return id;
 	}
+
+	public void drawCard(Card card) {
+		System.out.println("Player.drawCard");
+		System.out.println(playerDeck);
+		playerDeck.drawCard(card);
+	}
 }

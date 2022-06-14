@@ -27,6 +27,11 @@ class Deck {
 	public void remove(int index) {
 		cardList.remove(index);
 	}
+	public void drawCard(Card card) {
+		cardList.add(card);
+		System.out.println("deck.drawCard");
+		System.out.println(cardList);
+	}
 }
 
 class Card {
@@ -47,6 +52,9 @@ class Card {
 		this.suite = suite;
 	}
 
+	public int getNumber() {
+		return number;
+	}
 	public int getValue() {
 		if (number == 13) {
 			if (suite == Card.DIAMONDS || suite == Card.HEARTS) {
