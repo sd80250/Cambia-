@@ -86,7 +86,9 @@ public class Server {
 							out.println("lol retart");
 							out.println("guys this dude tried to flip on a null card");
 							out.println(id);
-							//player.drawCard(gameState.getDrawPileTopCard());
+							gameState.punishDraw(id);
+						} catch (IndexOutOfBoundsException i) {
+							out.println("u can't do that");
 							gameState.punishDraw(id);
 						}
 					}
@@ -98,10 +100,14 @@ public class Server {
 
 						try {
 							gameState.flipOtherCard(player.getPlayerID(), otherDude, cardFlipped);
+							out.println("good job");
+							out.println("which card do you want to give?");
+							int cardGive = Integer.parseInt(in.readLine());
+							gameState.giveCard(player.getPlayerID(), otherDude, cardGive);
 						} catch (NullPointerException i){
 							out.println("Sorry can't grab null cards");
 							gameState.punishDraw(id);
-						} catch (ArrayIndexOutOfBoundsException i) {
+						} catch (IndexOutOfBoundsException i) {
 							out.println("u stupid");
 							gameState.punishDraw(id);
 						}

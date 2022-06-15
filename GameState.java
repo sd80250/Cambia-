@@ -27,6 +27,7 @@ class GameState {
 		askNumPlayers();
 		createPlayers();
 		setRandomCurrentPlayer();
+		//topDiscardCard = new Card (1, 3);
 	}
 
 	private void shuffleAndSetDrawPile() {
@@ -64,7 +65,7 @@ class GameState {
 				playerdeck.add(drawPile.getCard(0));
 				drawPile.remove(0);
 			}
-			players[i] = new Player(playerdeck);
+			players[i] = new Player(playerdeck, i);
 			idPlayerMap.put(i, players[i]);
 		}
 	}
@@ -76,20 +77,26 @@ class GameState {
 
 	public void flipMyCard(int id, int cardFlipped) {
 		if (players[id].getPlayerHand().getCard(cardFlipped).getNumber()==topDiscardCard.getNumber()) {
-			players[id].replaceCard(cardFlipped, null);
+			players[id].removeCard(cardFlipped);
 		} else {
 			punishDraw(id);
 		}
 	}
 
 	public void flipOtherCard(int id, int otherId, int cardFlipped) {
+		if (id==otherId) {
+			throw new IndexOutOfBoundsException();
+		}
 		if (players[otherId].getPlayerHand().getCard(cardFlipped).getNumber()==topDiscardCard.getNumber()) {
-			players[otherId].replaceCard(cardFlipped, null);
+			players[otherId].removeCard(cardFlipped); 
 		} else {
 			punishDraw(id);
 		}
 	}
-
+	public void giveCard(int id, int otherId, int cardGiven) {
+		players[otherId].drawCard(players[id].getPlayerHand().getCard(cardGiven));
+		players[id].removeCard(cardGiven);
+	}
 	public void punishDraw(int id) {
 		System.out.println("GameState.punishDraw:");
 		System.out.println(players[id]);
